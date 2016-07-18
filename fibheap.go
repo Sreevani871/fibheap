@@ -44,6 +44,7 @@ func (f *FibHeap) Insert(v float64) *node.Node {
 		f.min = n
 	}
 	f.nodeCount++
+	f.consolidate()
 	return n
 }
 
@@ -265,4 +266,8 @@ func (f *FibHeap) CountNodes() int {
 		count += childCount(c.Children)
 	}
 	return count
+}
+
+func (f *FibHeap) PrintTrees() {
+	f.trees.PrintTree()
 }

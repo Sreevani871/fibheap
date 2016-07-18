@@ -33,6 +33,7 @@ func NewNode(v float64, parent *Node) *Node {
 // AddChild pushes a child node into this node's list of children.
 func (n *Node) AddChild(c *Node) {
 	c.Parent = n
+	//fmt.Println("child", c.Value, "parent", c.Parent)
 	c.Next = nil
 	c.prev = nil
 	n.Children.Insert(c)
@@ -117,6 +118,7 @@ func (nl *NodeList) Insert(n *Node) {
 	nl.back = n
 
 	nl.length++
+
 }
 
 /* Merge combines two node lists together. If the called node list is empty,
@@ -190,4 +192,12 @@ func (nl *NodeList) String() string {
 		}
 	}
 	return s
+}
+
+func (f *NodeList) PrintTree() {
+	//n := f.Len()
+	for i := f.Front(); i != nil; i = i.Next {
+		fmt.Println("Node:", i.Value, "degree:", i.Children.Len(), "parent", i.Parent)
+		i.Children.PrintTree()
+	}
 }
