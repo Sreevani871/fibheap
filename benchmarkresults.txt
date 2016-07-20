@@ -1,0 +1,13 @@
+PASS
+BenchmarkInsert-4     	 5000000	       261 ns/op	      80 B/op	       2 allocs/op
+BenchmarkExtractMin-4 	500000000	         3.79 ns/op	       0 B/op	       0 allocs/op
+BenchmarkGetMinValue-4	500000000	         3.05 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMerge-4      	300000000	         4.08 ns/op	       0 B/op	       0 allocs/op
+BenchmarkDecreaseKey-4	500000000	         3.76 ns/op	       0 B/op	       0 allocs/op
+BenchmarkDelete-4     	100000000	        11.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCount-4      	2000000000	         0.69 ns/op	       0 B/op	       0 allocs/op
+BenchmarkIsEmpty-4    	2000000000	         0.69 ns/op	       0 B/op	       0 allocs/op
+BenchmarkString-4     	500000000	         3.44 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCountNodes-4 	300000000	         4.15 ns/op	       0 B/op	       0 allocs/op
+BenchmarkCheckHeap-4  	300000000	         5.16 ns/op	       0 B/op	       0 allocs/op
+ok  	command-line-arguments	19.823s

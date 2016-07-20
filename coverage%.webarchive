@@ -1,0 +1,374 @@
+bplist00—_WebMainResource’	
+^WebResourceURL_WebResourceData_WebResourceMIMEType_WebResourceTextEncodingName_WebResourceFrameName_Tfile:///var/folders/mt/tvw119292ylgztl20h7fq0yh0000gp/T/cover396012848/coverage.htmlO1m<!DOCTYPE html><html><head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/Sreevani871/fibheap/fibheap.go (92.4%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: block;">package fibheap
+
+import "math"
+import "github.com/Sreevani871/fibheap/node"
+import "fmt"
+
+var (
+        NEG_INF = math.Inf(-1)
+)
+
+/* A Fibonacci Heap is collection of trees that satisfy the minimum heap
+property. It has a theoretical amortized running time better than other heap
+structures like the binomial heap. Nodes on the heap are sorted by floating-
+point values.*/
+type FibHeap struct {
+        trees     *node.NodeList
+        min       *node.Node
+        nodeCount int
+}
+
+// NewHeap returns a pointer to an empty Fibonacci heap.
+func NewHeap() *FibHeap <span class="cov8" title="1">{
+        f := new(FibHeap)
+        f.trees = node.NewNodeList()
+        return f
+}</span>
+
+// Len returns the number of top-level trees on the heap.
+func (f *FibHeap) Len() int <span class="cov8" title="1">{
+        return f.trees.Len()
+}</span>
+
+// Insert adds a new node to the heap with the given floating-point value. The
+// new node is added as a new top-level tree. Values may range from -Inf to Inf.
+func (f *FibHeap) Insert(v float64) *node.Node <span class="cov8" title="1">{
+        if v == NEG_INF </span><span class="cov0" title="0">{
+                fmt.Sprintf("Cannot add a value of negative infinity to the heap. %d", f.nodeCount)
+        }</span>
+
+        <span class="cov8" title="1">n := node.NewNode(v, nil)
+        f.trees.Insert(n)
+
+        if f.min == nil || n.Value &lt; f.min.Value </span><span class="cov8" title="1">{
+                f.min = n
+        }</span>
+        <span class="cov8" title="1">f.nodeCount++
+        //f.consolidate()
+        return n</span>
+}
+
+/* Merge combines two heaps by inserting the top-level nodes of the second into
+the top level of the first. The minimum element is updated accordingly. */
+func (f *FibHeap) Merge(g *FibHeap) <span class="cov8" title="1">{
+        if g == nil || g.Len() == 0 </span><span class="cov8" title="1">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">f.trees.Merge(g.trees)
+        if g.min.Value &lt; f.min.Value </span><span class="cov0" title="0">{
+                f.min = g.min
+        }</span>
+        <span class="cov8" title="1">f.nodeCount += g.nodeCount</span>
+}
+
+/* GetMinValue allows a "peek" at the minimum value of the heap. It does not
+change the heap or the minimum value at all. If the heap is empty, the heap
+throws a runtime panic.*/
+func (f *FibHeap) GetMinValue() float64 <span class="cov8" title="1">{
+        if f.min == nil </span><span class="cov8" title="1">{
+                return -1
+                //panic("Cannot get the min value of an empty heap!")
+        }</span>
+        <span class="cov8" title="1">return f.min.Value</span>
+}
+
+/* ExtractMin extracts the node with the lowest value off the heap and returns the
+value. The minimum node's children are added as top-level trees to the heap.
+The heap is then consolidated and a new minimum is found. If the heap is
+empty, the heap throws a runtime panic. */
+func (f *FibHeap) ExtractMin() float64 <span class="cov8" title="1">{
+        if f.min == nil || f.Len() == 0 </span><span class="cov8" title="1">{
+                return -1
+        }</span>
+
+        <span class="cov8" title="1">min := f.min.Value
+        f.trees.Remove(f.min)
+        f.nodeCount--
+
+        for c := f.min.Children.Front(); c != nil; c = c.Next </span><span class="cov8" title="1">{
+                c.Parent = nil
+                c.Marked = false
+        }</span>
+
+        <span class="cov8" title="1">f.trees.Merge(f.min.Children)
+
+        f.consolidate()
+
+        f.resetMin()
+
+        return min</span>
+}
+
+/* Consolidate reduces the number of top-level trees by combining trees with the
+same degree, or number of children. When consolidate is finished, each top-
+level node on the heap has a different degree. Consolidate has no effect on
+empty heaps. */
+func (f *FibHeap) consolidate() <span class="cov8" title="1">{
+        if f.nodeCount == 0 || f.trees.Front() == nil </span><span class="cov8" title="1">{
+                return
+        }</span>
+
+        <span class="cov8" title="1">ranks := make(map[int]*node.Node)
+
+        for curr := f.trees.Front(); curr != nil; </span><span class="cov8" title="1">{
+                deg := curr.Degree()
+
+                if ranks[deg] == nil </span><span class="cov8" title="1">{
+                        ranks[deg] = curr
+                        curr = curr.Next
+                        continue</span>
+                }
+                <span class="cov8" title="1">if ranks[deg] == curr </span><span class="cov8" title="1">{
+                        curr = curr.Next
+                        continue</span>
+                }
+
+                <span class="cov8" title="1">for ranks[deg] != nil </span><span class="cov8" title="1">{
+                        rank := ranks[deg]
+                        ranks[deg] = nil
+                        if curr.Value &lt;= rank.Value </span><span class="cov8" title="1">{
+                                f.trees.Remove(rank)
+                                curr.AddChild(rank)
+                        }</span><span class="cov8" title="1"> else {
+                                f.trees.Remove(curr)
+                                rank.AddChild(curr)
+                                curr = rank
+                        }</span>
+                }
+        }
+}
+
+/* resetMin searches for the minimum node on the top level and sets it to the
+heap's min pointer. If the heap is empty, the min pointer is set to nil. */
+func (f *FibHeap) resetMin() <span class="cov8" title="1">{
+        m := math.Inf(1)
+        f.min = nil
+        for curr := f.trees.Front(); curr != nil; curr = curr.Next </span><span class="cov8" title="1">{
+                if curr.Value &lt; m </span><span class="cov8" title="1">{
+                        f.min = curr
+                        m = curr.Value
+                }</span>
+        }
+}
+
+/* DecreaseKey takes the given node and reduces its value to the given value.
+If the value is greater than the current value of the node, a runtime panic
+is thrown. If the new value of the node breaks the minimum heap property,
+the node is cut from its parent and added to the top level of the tree. If
+its parent is already marked, its parent is also cut from the tree. The cuts
+go up the tree until an unmarked node or a root node are reached. If the
+parent isn't marked, it is marked. Root nodes can never be marked.*/
+func (f *FibHeap) DecreaseKey(n *node.Node, v float64) *node.Node <span class="cov8" title="1">{
+        if v &gt; n.Value </span><span class="cov8" title="1">{
+                return nil
+                panic("New value is greater than current value.")</span>
+        }
+
+        <span class="cov8" title="1">n.Value = v
+
+        if !n.IsRoot() </span><span class="cov8" title="1">{
+                p := n.Parent
+                if n.Value &lt; p.Value </span><span class="cov8" title="1">{
+                        f.cut(n)
+                        f.recCut(p)
+                }</span>
+        }
+        <span class="cov8" title="1">f.resetMin()
+
+        return n</span>
+}
+
+/* Cut removes the given node from its parent and adds it to the top level of
+the heap. It is unmarked in the process, because root nodes cannot be marked.*/
+func (f *FibHeap) cut(n *node.Node) <span class="cov8" title="1">{
+        p := n.Parent
+
+        n.Parent = nil
+        n.Marked = false
+
+        p.Children.Remove(n)
+        f.trees.Insert(n)
+}</span>
+
+/* recCut uses a recursive cutting method to remove all marked nodes from the
+tree and add them to the heap's top level. If it finds an unmarked node on
+the chain up to the root node, that node is marked and the recursive
+execution ends.*/
+func (f *FibHeap) recCut(n *node.Node) <span class="cov8" title="1">{
+        if !n.IsRoot() </span><span class="cov8" title="1">{
+                if n.Marked </span><span class="cov0" title="0">{
+                        p := n.Parent
+                        f.cut(n)
+                        f.recCut(p)
+                }</span><span class="cov8" title="1"> else {
+                        n.Marked = true
+                }</span>
+        }
+}
+
+/* Delete removes a node from the heap by setting its value to negative infinity,
+(which is guaranteed to be the lowest value on the heap. The minimum value
+of the heap is then popped, effectively deleting the desired node.*/
+func (f *FibHeap) Delete(n *node.Node) <span class="cov8" title="1">{
+        f.DecreaseKey(n, NEG_INF)
+        f.ExtractMin()
+}</span>
+
+// IsEmpty confirms whether there are 0 nodes on the heap.
+func (f *FibHeap) IsEmpty() bool <span class="cov0" title="0">{
+        return f.nodeCount == 0
+}</span>
+
+/* String generates a string representation of the heap. If the heap is empty,
+String returns "[Empty Heap]". Otherwise, it returns a recursive string
+ representation of the all of the trees on the heap.*/
+func (f *FibHeap) String() string <span class="cov8" title="1">{
+        if f.Len() == 0 </span><span class="cov8" title="1">{
+                return "[Empty Heap]"
+        }</span>
+
+        <span class="cov0" title="0">return f.trees.String()</span>
+}
+
+/* Count() return no.of nodes in fibheap */
+func (f *FibHeap) Count() int <span class="cov8" title="1">{
+        return f.nodeCount
+}</span>
+
+/* CheckHeap() returns whether no.of nodes in fibheap and size is equal or not */
+
+func (f *FibHeap) CheckHeap() bool <span class="cov8" title="1">{
+        hsize := f.Count()
+
+        count := 0
+        for c := f.trees.Front(); c != nil; c = c.Next </span><span class="cov8" title="1">{
+                count += childCount(c.Children)
+        }</span>
+        <span class="cov8" title="1">if count != hsize </span><span class="cov0" title="0">{
+                return false
+        }</span>
+        <span class="cov8" title="1">return true</span>
+}
+
+func childCount(cl *node.NodeList) int <span class="cov8" title="1">{
+        count := 1
+        for c := cl.Front(); c != nil; c = c.Next </span><span class="cov8" title="1">{
+                count += childCount(c.Children)
+        }</span>
+        <span class="cov8" title="1">return count</span>
+}
+
+/* CountNodes returns the number of nodes in fibnocci heap*/
+func (f *FibHeap) CountNodes() int <span class="cov8" title="1">{
+        count := 0
+        for c := f.trees.Front(); c != nil; c = c.Next </span><span class="cov8" title="1">{
+                count += childCount(c.Children)
+        }</span>
+        <span class="cov8" title="1">return count</span>
+}
+
+func (f *FibHeap) PrintTrees() <span class="cov8" title="1">{
+        f.trees.PrintTree()
+}</span>
+</pre>
+		
+		</div>
+	
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+
+</body></html>Ytext/htmlUUTF-8P    ( 7 I _ } î Î2\2f2l                           2m

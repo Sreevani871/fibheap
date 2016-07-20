@@ -1,0 +1,10 @@
+PASS
+BenchmarkNewNode-4    	20000000	        56.1 ns/op	      32 B/op	       1 allocs/op
+BenchmarkAddChild-4   	300000000	         5.48 ns/op	       0 B/op	       0 allocs/op
+BenchmarkDeleteChild-4	200000000	         6.36 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFront-4      	2000000000	         0.36 ns/op	       0 B/op	       0 allocs/op
+BenchmarkBack-4       	2000000000	         0.38 ns/op	       0 B/op	       0 allocs/op
+BenchmarkLen-4        	2000000000	         0.71 ns/op	       0 B/op	       0 allocs/op
+BenchmarkRemove-4     	300000000	         4.61 ns/op	       0 B/op	       0 allocs/op
+BenchmarkMerge-4      	200000000	         7.84 ns/op	       0 B/op	       0 allocs/op
+ok  	command-line-arguments	12.612s

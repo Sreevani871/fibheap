@@ -34,7 +34,7 @@ func (f *FibHeap) Len() int {
 // new node is added as a new top-level tree. Values may range from -Inf to Inf.
 func (f *FibHeap) Insert(v float64) *node.Node {
 	if v == NEG_INF {
-		panic(fmt.Sprintf("Cannot add a value of negative infinity to the heap. %d", f.nodeCount))
+		fmt.Sprintf("Cannot add a value of negative infinity to the heap. %d", f.nodeCount)
 	}
 
 	n := node.NewNode(v, nil)
@@ -44,7 +44,7 @@ func (f *FibHeap) Insert(v float64) *node.Node {
 		f.min = n
 	}
 	f.nodeCount++
-	f.consolidate()
+	//f.consolidate()
 	return n
 }
 
@@ -68,7 +68,7 @@ throws a runtime panic.*/
 func (f *FibHeap) GetMinValue() float64 {
 	if f.min == nil {
 		return -1
-		panic("Cannot get the min value of an empty heap!")
+		//panic("Cannot get the min value of an empty heap!")
 	}
 	return f.min.Value
 }
