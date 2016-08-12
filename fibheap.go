@@ -54,7 +54,10 @@ func (f *FibHeap) Merge(g *FibHeap) {
 	if g == nil || g.Len() == 0 {
 		return
 	}
-
+	if f == nil || f.Len() == 0 {
+		fmt.Println("no elements in heap to merge with")
+		return
+	}
 	f.trees.Merge(g.trees)
 	if g.min.Value < f.min.Value {
 		f.min = g.min
@@ -67,6 +70,7 @@ change the heap or the minimum value at all. If the heap is empty, the heap
 throws a runtime panic.*/
 func (f *FibHeap) GetMinValue() float64 {
 	if f.min == nil {
+		fmt.Println("Cannot get the min value of an empty heap!")
 		return -1
 		//panic("Cannot get the min value of an empty heap!")
 	}
@@ -79,6 +83,7 @@ The heap is then consolidated and a new minimum is found. If the heap is
 empty, the heap throws a runtime panic. */
 func (f *FibHeap) ExtractMin() float64 {
 	if f.min == nil || f.Len() == 0 {
+		fmt.Println("Queue is empty")
 		return -1
 	}
 
